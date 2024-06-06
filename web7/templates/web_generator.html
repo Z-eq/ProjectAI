@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI WEB SERVICE</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-size: 0.9rem; /* Slightly smaller font size */
+        }
+        .top-right-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        h1, h2 {
+            font-size: 1.5rem; /* Smaller heading sizes */
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .btn {
+            padding: 0.375rem 0.75rem; /* Slightly smaller buttons */
+            font-size: 0.9rem;
+        }
+        .table th, .table td {
+            padding: 0.5rem; /* Smaller table padding */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+            <h1>AI Web Generator</h1>
+            <div class="top-right-buttons">
+                <a href="{{ url_for('home') }}" class="btn btn-secondary">Main Page</a>
+                <a href="{{ url_for('file_query.query_files') }}" class="btn btn-primary">File Query</a>
+            </div>
+        </div>
+        
+        <h2>Generate a New Webpage</h2>
+        <form action="{{ url_for('web_generator.generate_page') }}" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="page_name">Page Name:</label>
+                <input type="text" id="page_name" name="page_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="page_description">Page Description:</label>
+                <textarea id="page_description" name="page_description" rows="4" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="template_choice">Or Choose a Template:</label>
+                <select id="template_choice" name="template_choice" class="form-control">
+                    <option value="">None</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="portfolio">Portfolio</option>
+                    <option value="ecommerce">E-commerce</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Generate Page</button>
+        </form>
+        
+        {% if generate_response %}
+            <h2>Generate Response:</h2>
+            <p>{{ generate_response|safe }}</p>
+        {% endif %}
+        
+        <h2>Update an Existing HTML Page</h2>
+        <form action="{{ url_for('web_generator.update_html') }}" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="page_name">Page Name:</label>
+                <input type="text" id="page_name" name="page_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="update_description">Update Description:</label>
+                <textarea id="update_description" name="update_description" rows="4" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-warning">Update HTML</button>
+        </form>
+        
+        {% if update_response %}
+            <h2>Update Response:</h2>
+            <p>{{ update_response|safe }}</p>
+        {% endif %}
+        
+        <h2>Rollback an Update</h2>
+        <form action="{{ url_for('web_generator.rollback') }}" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="page_name">Page Name:</label>
+                <input type="text" id="page_name" name="page_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="version_id">Version ID:</label>
+                <input type="text" id="version_id" name="version_id" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Rollback</button>
+        </form>
+        
+        {% if rollback_response %}
+            <h2>Rollback Response:</h2>
+            <p>{{ rollback_response|safe }}</p>
+        {% endif %}
+        
+        <h2>Version History</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Version ID</th>
+                    <th>Page Name</th>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for version in versions %}
+                <tr>
+                    <td>{{ version[0] }}</td>
+                    <td>{{ version[1] }}</td>
+                    <td>{{ version[2] }}</td>
+                    <td>
+                        <form action="{{ url_for('web_generator.rollback') }}" method="post" style="display:inline;">
+                            <input type="hidden" name="version_id" value="{{ version[0] }}">
+                            <input type="hidden" name="page_name" value="{{ version[1] }}">
+                            <button type="submit" class="btn btn-warning btn-sm">Rollback</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
