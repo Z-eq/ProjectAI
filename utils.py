@@ -3,14 +3,13 @@ import openai
 import logging
 import sqlite3
 from datetime import datetime
-from timing import timing
 
 # Initialize OpenAI API key
 openai.api_key = os.getenv('OPENAI_API_KEY')
-VERSIONS_DB = 'file_index.db'
+FILE_INDEX_DB = 'file_index.db'
+VERSIONS_DB = 'versions.db'
 
 # Function to query OpenAI and get a response
-@timing
 def query_openai_gpt(prompt):
     try:
         response = openai.ChatCompletion.create(
@@ -34,10 +33,9 @@ def query_openai_gpt(prompt):
         logging.error(f"OpenAI API error: {e}")
         return "There was an error processing your request. Please try again later."
 
-# Function to initialize the database (create tables if they don't exist)
-@timing
-def initialize_db():
-    conn = sqlite3.connect(VERSIONS_DB)
+# Function to initialize the file index database (create tables if they don't exist)
+def initialize_file_index_db():
+    conn = sqlite3.connect(FILE_INDEX_DB)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS files (
@@ -45,6 +43,13 @@ def initialize_db():
             content TEXT
         )
     ''')
+    conn.commit()
+    conn.close()
+
+# Function to initialize the versions database (create tables if they don't exist)
+def initialize_versions_db():
+    conn = sqlite3.connect(VERSIONS_DB)
+    cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS web_generator_versions (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,7 +62,6 @@ def initialize_db():
     conn.close()
 
 # Function to save a version of a generated webpage
-@timing
 def save_version(page_name, content):
     conn = sqlite3.connect(VERSIONS_DB)
     cursor = conn.cursor()
@@ -69,7 +73,6 @@ def save_version(page_name, content):
     conn.close()
 
 # Function to get all versions of generated webpages
-@timing
 def get_versions():
     conn = sqlite3.connect(VERSIONS_DB)
     cursor = conn.cursor()
@@ -79,7 +82,6 @@ def get_versions():
     return versions
 
 # Function to get the content of a specific version of a generated webpage
-@timing
 def get_version_by_id(version_id):
     conn = sqlite3.connect(VERSIONS_DB)
     cursor = conn.cursor()
