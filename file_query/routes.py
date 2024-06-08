@@ -6,11 +6,14 @@ from file_indexer import index_files, get_indexed_files, get_file_content
 from datetime import datetime
 import logging
 
-# definera blueprinten
+# Definiera blueprint
 file_query_bp = Blueprint('file_query', __name__)
 
-# standard mapp
-DEFAULT_FOLDER_PATH = r'C:\Users\Z\Documents\Skol-Material\Lektioner\Filer'
+# Standard MAPP för filer
+DEFAULT_FOLDER_PATH = r'Filer'
+
+# Skapa mappen om den inte finns
+os.makedirs(DEFAULT_FOLDER_PATH, exist_ok=True)
 
 @file_query_bp.route('/file_query', methods=['GET', 'POST'])
 def query_files():
@@ -18,10 +21,10 @@ def query_files():
         user_query = request.form['query']
         read_files = 'read_files_toggle' in request.form
 
-        #Spara läsafiler instöllning i sessionen
+        # Spara toggle state i session
         session['read_files'] = read_files
 
-        # Anv'nd OpenAi för att avgöra en förfrågan
+        # Använd OpenAI för att bestämma avsikten med frågan
         intent_prompt = f"Determine the intent of this query: {user_query}. Possible intents include 'list file names', 'count files', 'read file contents', or 'general question'."
         intent_response = query_openai_gpt(intent_prompt).lower()
 
@@ -42,13 +45,13 @@ def query_files():
         elif 'read file contents' in intent_response:
             index_files(folder_path, read_content=True)
             file_index = get_indexed_files(read_content=True)
-            # Extract the file name from the query
+            # Extrahera filnamn från frågan
             file_name = extract_file_name(user_query)
             file_path = os.path.join(folder_path, file_name)
             file_content = get_file_content(file_path)
             openai_prompt = f"Based on the content of the file {file_name}, answer the question: {user_query}\n\n{file_content}"
         else:
-            # Läs endast filerna om bocken är ikryssat för (Read files)
+            # Allmän fråga, läs filer endast om toggle är på
             if read_files:
                 index_files(folder_path)
                 file_index = get_indexed_files()
@@ -56,7 +59,7 @@ def query_files():
             else:
                 openai_prompt = f"Answer the following question: {user_query}"
 
-        # Query OpenAI GPT-3.5 Turbo
+        # Fråga OpenAI GPT-3.5 Turbo
         try:
             ai_response = query_openai_gpt(openai_prompt)
             formatted_response = ai_response.replace('\n', '<br>').replace('1. ', '<ol><li>').replace('2. ', '<li>').replace('3. ', '<li>').replace('4. ', '<li>').replace('5. ', '<li>').replace('6. ', '<li>').replace('7. ', '<li>').replace('8. ', '<li>').replace('9. ', '<li>') + '</li></ol>'
@@ -68,7 +71,7 @@ def query_files():
     return render_template('file_query.html', read_files_toggle=session.get('read_files', False))
 
 def extract_file_name(query):
-    # Use OpenAI to extract file name from the query
+    # Använd OpenAI för att extrahera filnamn från frågan
     extraction_prompt = f"Extract the file name from the following query: {query}"
     file_name = query_openai_gpt(extraction_prompt).strip()
     return file_name
