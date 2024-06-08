@@ -5,3 +5,4 @@ PyPDF2
 pandas
 pillow
 beautifulsoup4
+python-dotenv

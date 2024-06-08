@@ -2,9 +2,11 @@ import time
 import requests
 import logging
 
-# Sidor for testning
+# Sidor for testning (Byt till dina aktuella ip)
 web_generator_url = "http://127.0.0.1:5000/web_generator"
 file_query_url = "http://127.0.0.1:5000/file_query"
+web_generator_url = "http://192.168.1.213:5000/web_generator"
+file_query_url = "http://192.168.1.213:5000/file_query"
 
 # Sample data for requests
 generate_page_data = {
