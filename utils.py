@@ -6,8 +6,8 @@ from datetime import datetime
 
 # Initialize OpenAI API key
 openai.api_key = os.getenv('OPENAI_API_KEY')
-FILE_INDEX_DB = 'file_index.db'
 VERSIONS_DB = 'versions.db'
+FILE_INDEX_DB = 'file_index.db'
 
 # Function to query OpenAI and get a response
 def query_openai_gpt(prompt):
@@ -33,7 +33,7 @@ def query_openai_gpt(prompt):
         logging.error(f"OpenAI API error: {e}")
         return "There was an error processing your request. Please try again later."
 
-# Function to initialize the file index database (create tables if they don't exist)
+# Function to initialize the file index database
 def initialize_file_index_db():
     conn = sqlite3.connect(FILE_INDEX_DB)
     cursor = conn.cursor()
@@ -46,7 +46,7 @@ def initialize_file_index_db():
     conn.commit()
     conn.close()
 
-# Function to initialize the versions database (create tables if they don't exist)
+# Function to initialize the versions database
 def initialize_versions_db():
     conn = sqlite3.connect(VERSIONS_DB)
     cursor = conn.cursor()
