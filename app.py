@@ -3,9 +3,9 @@ import logging
 from flask import Flask, render_template
 from file_query.routes import file_query_bp
 from web_generator.web_routes import web_generator_bp
-from utils import initialize_db
+from utils import initialize_file_index_db, initialize_versions_db
 
-# Starta flaskserver  app
+# Starta flaskserver app
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', os.urandom(24).hex())
 
@@ -17,11 +17,12 @@ app.register_blueprint(web_generator_bp)
 OUTPUT_FOLDER_PATH = 'static/output'  # om inte, skapar det en
 os.makedirs(OUTPUT_FOLDER_PATH, exist_ok=True)
 
-
-initialize_db()
+# Initialize databases
+initialize_file_index_db()
+initialize_versions_db()
 
 # simple loggning med lite extra info.
-logging.basicConfig(level=logging.DEBUG)  
+logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def home():
