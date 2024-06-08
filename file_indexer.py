@@ -4,9 +4,9 @@ import PyPDF2
 import pandas as pd
 import mimetypes
 from bs4 import BeautifulSoup
-from utils import initialize_db
+from utils import initialize_file_index_db
 
-# xxtrahera text från olika filtyper
+# Extrahera text från olika filtyper
 def extract_text(file_path):
     mime_type, _ = mimetypes.guess_type(file_path)  # Hitta filens typ
     if mime_type == 'application/pdf':  # Om det är en PDF-fil
@@ -15,20 +15,20 @@ def extract_text(file_path):
             text = "".join(page.extract_text() or "" for page in reader.pages)  # Läs text från varje sida
     elif mime_type in ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']:  # Om det är en Excel-fil
         text = pd.read_excel(file_path).to_string()  # Läs innehåll från Excel-fil
-    elif mime_type == 'text/plain':  # Om det är en textfil
+    elif mime_type == 'text/plain':  # 
         with open(file_path, 'r') as file:
-            text = file.read()  # Läs text från textfil
-    elif mime_type == 'text/html':  # Om det är en HTML-fil
+            text = file.read()  # 
+    elif mime_type == 'text/html':  # 
         with open(file_path, 'r') as file:
             soup = BeautifulSoup(file, 'html.parser')
             text = soup.get_text()  # Extrahera text från HTML-fil
     else:  # Om filtypen inte stöds
-        text = f"Unsupported file type: {mime_type}"  # Meddelande om filtypen inte stöds
+        text = f"filtyp stöds inte: {mime_type}"  #
     return text
 
-# indexera filer (läsa och spara innehållet i datbasen)
+# Indexera filer (läsa och spara innehållet i databasen)
 def index_files(folder_path, read_content=True):
-    initialize_db()  # Initiera databasen (skapa tabeller om de inte finns)
+    initialize_file_index_db()  # Initiera databasen (skapa tabeller om de inte finns)
     conn = sqlite3.connect('file_index.db')  # Anslut till databasen
     cursor = conn.cursor()
     
@@ -39,7 +39,7 @@ def index_files(folder_path, read_content=True):
     cursor.execute('SELECT file_path FROM files')
     db_files = {row[0] for row in cursor.fetchall()}
     
-    # Lägg till eller uppdatera aktuella filer i basen
+    # Lägg till eller uppdatera aktuella filer i databasen
     for file_path in current_files:
         content = extract_text(file_path) if read_content else ""  # Läs filens innehåll om read_content är True
         cursor.execute('''
@@ -47,33 +47,33 @@ def index_files(folder_path, read_content=True):
             VALUES (?, ?)
         ''', (file_path, content))  # Spara filens innehåll i databasen
     
-    # radera filer som inte längre finns
+    # Radera filer som inte längre finns
     for file_path in db_files - current_files:
         cursor.execute('DELETE FROM files WHERE file_path = ?', (file_path,))
     
-    conn.commit()  # Spara ändringar i db
-    conn.close()  # Stäng anslutningen till db
+    conn.commit()  # Spara ändringar i databasen
+    conn.close()  # Stäng anslutningen till databasen
     
-# hämtar alla indexerade filer
+# Hämta alla indexerade filer
 def get_indexed_files(read_content=True):
-    conn = sqlite3.connect('file_index.db')  # Anslut till dbs
+    conn = sqlite3.connect('file_index.db')  # Anslut till databasen
     cursor = conn.cursor()
     if read_content:
         cursor.execute('SELECT file_path, content FROM files')
         rows = cursor.fetchall()
-        files = {row[0]: row[1] for row in rows}  # visas filnamn och innehåll
+        files = {row[0]: row[1] for row in rows}  # Returnera filnamn och innehåll
     else:
         cursor.execute('SELECT file_path FROM files')
         rows = cursor.fetchall()
-        files = [row[0] for row in rows]  # visar endast filnamn
+        files = [row[0] for row in rows]  # Returnera bara filnamn
     conn.close() 
     return files
 
-# hämta innehåll i en specifik fil
+# Hämtar inehåll i en fil
 def get_file_content(file_path):
     conn = sqlite3.connect('file_index.db')  # Anslut till databasen
     cursor = conn.cursor()
     cursor.execute('SELECT content FROM files WHERE file_path = ?', (file_path,))
     result = cursor.fetchone()
-    conn.close()  # 
+    conn.close()  # Stäng anslutningen till databasen
     return result[0] if result else "Inget hittat här."  # Returnera filens innehåll eller ett meddelande om inget innehåll finns
