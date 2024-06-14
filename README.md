@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
     content TEXT
 );
-
+########
 # funktioner relaterade till `file_index.db`:
 
 ```python
