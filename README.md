@@ -43,9 +43,9 @@ Projektet använder SQLite, en enkel databas för att lagra information om filer
 CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
     content TEXT
-);
-########
-# funktioner relaterade till `file_index.db`:
+);'
+
+### `funktioner relaterade till`  `file_index.db`:
 
 ```python
 def initialize_file_index_db():
