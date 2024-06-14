@@ -1,5 +1,5 @@
 
-# Projektbeskrivning på enkel svenska
+# ProjectAI
 
 ## Översikt av filer
 
