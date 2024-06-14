@@ -45,5 +45,20 @@ CREATE TABLE IF NOT EXISTS files (
     content TEXT
 );
 
+# funktioner relaterade till `file_index.db`:
+
+```python
+def initialize_file_index_db():
+    conn = sqlite3.connect(FILE_INDEX_DB)
+    cursor = conn.cursor()
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS files (
+        file_path TEXT PRIMARY KEY,
+        content TEXT
+    )
+    ''')
+    conn.commit()
+    conn.close()
+
 
 
