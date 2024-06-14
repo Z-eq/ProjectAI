@@ -38,13 +38,12 @@ Projektet använder SQLite, en enkel databas för att lagra information om filer
 - Tabell: `files`
   - **file_path**: TEXT (Primärnyckel) - Filens sökväg.
   - **content**: TEXT - Filens innehåll.
-
-´´´sql
+    
+```sql
 CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
     content TEXT
 );
-
 
 
 
