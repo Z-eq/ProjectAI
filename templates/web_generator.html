@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-size: 0.9rem; /* Slightly smaller font size */
+            font-size: 0.9rem;
         }
         .top-right-buttons {
             display: flex;
@@ -14,19 +14,28 @@
             gap: 10px;
         }
         h1, h2 {
-            font-size: 1.5rem; /* Smaller heading sizes */
+            font-size: 1.5rem;
         }
         .form-group {
             margin-bottom: 1rem;
         }
         .btn {
-            padding: 0.375rem 0.75rem; /* Slightly smaller buttons */
+            padding: 0.375rem 0.75rem;
             font-size: 0.9rem;
         }
         .table th, .table td {
-            padding: 0.5rem; /* Smaller table padding */
+            padding: 0.5rem;
+        }
+        .spinner-border {
+            display: none;
+            margin-left: 10px;
         }
     </style>
+    <script>
+        function showSpinner(spinnerId) {
+            document.getElementById(spinnerId).style.display = 'inline-block';
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -39,7 +48,7 @@
         </div>
         
         <h2>Generate a New Webpage</h2>
-        <form action="{{ url_for('web_generator.generate_page') }}" method="post" class="mb-4">
+        <form action="{{ url_for('web_generator.generate_page') }}" method="post" class="mb-4" onsubmit="showSpinner('generate-spinner')">
             <div class="form-group">
                 <label for="page_name">Page Name:</label>
                 <input type="text" id="page_name" name="page_name" class="form-control" required>
@@ -58,6 +67,9 @@
                 </select>
             </div>
             <button type="submit" class="btn btn-success">Generate Page</button>
+            <div class="spinner-border text-success" id="generate-spinner" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </form>
         
         {% if generate_response %}
@@ -66,7 +78,7 @@
         {% endif %}
         
         <h2>Update an Existing HTML Page</h2>
-        <form action="{{ url_for('web_generator.update_html') }}" method="post" class="mb-4">
+        <form action="{{ url_for('web_generator.update_html') }}" method="post" class="mb-4" onsubmit="showSpinner('update-spinner')">
             <div class="form-group">
                 <label for="page_name">Page Name:</label>
                 <input type="text" id="page_name" name="page_name" class="form-control" required>
@@ -76,6 +88,9 @@
                 <textarea id="update_description" name="update_description" rows="4" class="form-control" required></textarea>
             </div>
             <button type="submit" class="btn btn-warning">Update HTML</button>
+            <div class="spinner-border text-warning" id="update-spinner" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </form>
         
         {% if update_response %}
@@ -84,7 +99,7 @@
         {% endif %}
         
         <h2>Rollback an Update</h2>
-        <form action="{{ url_for('web_generator.rollback') }}" method="post" class="mb-4">
+        <form action="{{ url_for('web_generator.rollback') }}" method="post" class="mb-4" onsubmit="showSpinner('rollback-spinner')">
             <div class="form-group">
                 <label for="page_name">Page Name:</label>
                 <input type="text" id="page_name" name="page_name" class="form-control" required>
@@ -94,6 +109,9 @@
                 <input type="text" id="version_id" name="version_id" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-danger">Rollback</button>
+            <div class="spinner-border text-danger" id="rollback-spinner" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </form>
         
         {% if rollback_response %}
@@ -118,7 +136,7 @@
                     <td>{{ version[1] }}</td>
                     <td>{{ version[2] }}</td>
                     <td>
-                        <form action="{{ url_for('web_generator.rollback') }}" method="post" style="display:inline;">
+                        <form action="{{ url_for('web_generator.rollback') }}" method="post" style="display:inline;" onsubmit="showSpinner('rollback-spinner')">
                             <input type="hidden" name="version_id" value="{{ version[0] }}">
                             <input type="hidden" name="page_name" value="{{ version[1] }}">
                             <button type="submit" class="btn btn-warning btn-sm">Rollback</button>
