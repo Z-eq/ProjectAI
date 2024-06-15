@@ -32,7 +32,7 @@
 
 ## Databasfunktioner
 
-### Databasstruktur och relatione
+### Databasstruktur och relationer
 
 Projektet använder SQLite, en enkel databas för att lagra information om filer och versioner av webbsidor.
  Det finns två databaser en för Fil förfrågningar och en för webgenerator.
