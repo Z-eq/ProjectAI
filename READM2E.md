@@ -1,6 +1,4 @@
 
-markdown
-Kopiera kod
 # Databasanvändning och relationer i projektet
 
 Projektet använder SQLite, en inbäddad SQL-databas, för att lagra information om filer och versioner av genererade webbsidor. Det finns två huvudsakliga databaser som hanteras i detta projekt:
@@ -19,16 +17,14 @@ Denna databas hanterar indexeringen av filer. Databasen har en tabell som heter 
 
 ### Exempel på SQL-schema:
 
-```sql
+``sql
 CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
     content TEXT
 );
 
- ` ``` `
-
-
-` ### Funktioner relaterade till file_index.db: `
+ 
+ ### Funktioner relaterade till file_index.db: `
 initialize_file_index_db: Initierar databasen genom att skapa tabellen om den inte redan finns.
 index_files: Indexerar filer i en given mapp och sparar deras innehåll i databasen.
 get_indexed_files: Hämtar alla indexerade filer, antingen med eller utan innehåll.
