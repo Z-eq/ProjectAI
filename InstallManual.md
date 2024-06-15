@@ -43,7 +43,7 @@ Altenativ 2 utan vitruell envoriemnt.
  
 Öppna cmd och kör kommandot nedan:
 
-# pip install -r requirements.txt
+#### pip install -r requirements.txt
  
 setx OPENAI_API_KEY "DIN_API_NYCKEL_HÄR"
 
@@ -51,7 +51,7 @@ Starta om cmd och gå in till din projet så är du klar att köra.
 
 För att starta Flask-servern, skriv:
 
-   # python app.py
+#### python app.py
 
 Öppna en webbläsare och gå till: http://127.0.0.1:5000
 
