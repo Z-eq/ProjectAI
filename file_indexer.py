@@ -1,10 +1,10 @@
-import os
-import sqlite3
-import PyPDF2
-import pandas as pd
-import mimetypes
-from bs4 import BeautifulSoup
-from utils import initialize_file_index_db
+import os  
+import sqlite3  # Används för att hantera SQLite-databaser
+import PyPDF2  # Används för att läsa PDF-filer
+import pandas as pd  # Används för att hantera Excel-filer
+import mimetypes  # Används för att identifiera filtyper
+from bs4 import BeautifulSoup  # Används för att hantera HTML-filer
+from utils import initialize_file_index_db  # Importerar funktionen för att initiera filindexdatabasen
 
 # Extrahera text från olika filtyper
 def extract_text(file_path):
@@ -15,16 +15,16 @@ def extract_text(file_path):
             text = "".join(page.extract_text() or "" for page in reader.pages)  # Läs text från varje sida
     elif mime_type in ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']:  # Om det är en Excel-fil
         text = pd.read_excel(file_path).to_string()  # Läs innehåll från Excel-fil
-    elif mime_type == 'text/plain':  # 
+    elif mime_type == 'text/plain':  # Om det är en vanlig textfil
         with open(file_path, 'r') as file:
-            text = file.read()  # 
-    elif mime_type == 'text/html':  # 
+            text = file.read()  # Läs text från filen
+    elif mime_type == 'text/html':  # Om det är en HTML-fil
         with open(file_path, 'r') as file:
             soup = BeautifulSoup(file, 'html.parser')
-            text = soup.get_text()  # Extrahera text från HTML-fil
+            text = soup.get_text()  # Extrahera text från HTML-fil genom beautifulsoap
     else:  # Om filtypen inte stöds
-        text = f"filtyp stöds inte: {mime_type}"  #
-    return text
+        text = f"Filtyp stöds inte: {mime_type}"  # Meddelande om att filtypen inte stöds
+    return text  # Returnera extraherad text
 
 # Indexera filer (läsa och spara innehållet i databasen)
 def index_files(folder_path, read_content=True):
@@ -66,10 +66,10 @@ def get_indexed_files(read_content=True):
         cursor.execute('SELECT file_path FROM files')
         rows = cursor.fetchall()
         files = [row[0] for row in rows]  # Returnera bara filnamn
-    conn.close() 
-    return files
+    conn.close()  # Stäng anslutningen till databasen
+    return files  # Returnera filerna
 
-# Hämtar inehåll i en fil
+# Hämta innehållet i en fil
 def get_file_content(file_path):
     conn = sqlite3.connect('file_index.db')  # Anslut till databasen
     cursor = conn.cursor()
