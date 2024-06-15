@@ -443,4 +443,4 @@ Tanken var endast vi skulle bygga en web generator men när vi insåg att man ä
 ChatGPT kan även vara en stor vilseledare om man inte känner till lite grund programmering. Vi är övertygade om att AI är ny tidens Industrialisering och för dem som gillar teknik är detta en dröm som man än inte fattat har blivit verklighet och för dem som är oroliga att AI ska ta deras jobb vill vi avsluta med en citat!
 
 ### > "AI May Not Take Your Job, But Someone Using AI Likely Will"  
-      > — Richard Baldwin, an economist and professor
+                   > — Richard Baldwin, an economist and professor
