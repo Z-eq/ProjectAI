@@ -60,7 +60,7 @@ För att starta Flask-servern, skriv:
 ## Automatisk installation med skript i powershell
 
 ( Av säkerhets skäl har vi valt att endast köra installationen i virtuell miljö med skript. 
-vill ni köra utanför i vanligt miljö får ni köra manuell installation eller ändra i skriptfilen)
+vill ni köra utanför i vanligt miljö får ni köra manuell installation eller ändra i skriptfilen så det inte går in virtuel miljö i början)
 
 Tryck på Win+x och välj att öppna PowerShell som administratör.
 
