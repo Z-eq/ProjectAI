@@ -1,52 +1,81 @@
-# Projektrapport
+# Manuell & Automatisk installation med skript för powershell
 
-## Introduktion
-Detta projekt är till att utveckla en applikation som använder OpenAI API för att generera websidor
-uppdatera websidor och analysera filer på egen dator. Projektet är delvis byggt med hjälp av ChatGPT, 
-Vi har använt kod av redan skapade projekt och sedan gjort om till vår önskemål.
+**** Manuell installation ***
 
-## Logg
+Innan du börjar, se till att du har följande programvara installerad:
 
-- Implementering av grundläggande file query och webgenerator:
-- Testning och felsökning: Att få den att förstå rätt uppdrag , att få den att lära sig visa uppdrag
-- Granskning för inlämning: Efter att vi fått önskat funktion har vi beslutat att avsluta det.
-- Detta projekt är av en typ som kräver otroligt mcyekt tid och inlärning för att utvkeckla och få den att bli perfekt.
-- Att få den att läsa fil innehåll och följdfrågor.
-- Sist har vi impelemnterat tidtagning.
+-  Python3 
 
-## Benchmark
+1. Extrahera projektet till den plats där du vill ha det.
 
-Vi gjorde en skript som mäter tiden för dem olika funktioner vi har . och får lite olika tider 
-beroende på vad man gör, förfrågninar tar längre tid då det är nätverksbaserat.
+2. Ställ in en virtuell miljö
 
-INFO:root:Running benchmark for: Generate a new web page
-INFO:root:Generate a new web page took 16.6012 seconds with status code 200
-INFO:root:Running benchmark for: Query list my files
-INFO:root:Query list my files took 0.6518 seconds with status code 200
-INFO:root:Running benchmark for: Query summarize my files
-INFO:root:Query summarize my files took 5.0333 seconds with status code 200
+Att ställa in en virtuell miljö är frillivilligt man kan hoppa över detta om man vill men är rekommenderat
+för att inte påverka andra program eller paket och för statbilitet, läs mera om "virtual environment in python").
+
+Öppna kommandotolken (cmd) och gå till projektets mapp .
 
 
+Skriv följande kommandon:
+    
+    # python -m venv venv
 
-## Observationer
-- Implementeringen av filhantering var lite enklare men än mycket att lära sig, svårare var web generering 
-var utmanande att göra rätt från början, alla detaljer måste var nogran planerade och man bör kunna html 
-eller nogrant inspektera genereade koden för att få rätt uppdatering. 
-- Filförfrågning kan bli fel ibland bereoende på vad man frågar i början. Finns mcyekt att lära och förfina.
+    # .\venv\Scripts\Activate
+	
+	När du är i (venv) miljö anger du kommandot: 
+	
+	# pip install -r requirements.txt
 
-- Att även använda sklearn modulen hade varit ett bra sätt att göra skriptet självlärande
+3. Du måste se till att API nyklen finns tillgänglig  i .env filen 
 
-- Använda GPT-4-Turbo kan bidra till mer avancerad och nograre apimen dyrare!
+  1. Du behöver skapa en fil som heter .env i projektmappen :
+  
+  OPENAI_API_KEY= din_openai_api_nyckel
 
-- Måste vara välduigt noga med koden så att man inte slösar toeksn o man råkar ha en loop där stora filer finns.
+Spara filen som .env i root av din projekt detta krävs för att köra vrituell miljö.
 
+När du är klar kör programmet!
 
+ #  python app.py
 
-## Slutsats
+---------------------- UTAN VENV ---------------------------------------------------
+Altenativ 2 utan vitruell envoriemnt. 
+ 
+Öppna cmd och kör kommandot nedan:
 
-Tanken var endast vi skulle bygga en web generator men när vi insåg att man även skulle ha fil funktion för att man ska kunna spara/uppdatera websidor tyckte vi det var intressant att ha en fil assistent. Efter att ha testat vår egna fil assistent och webgenerator kan vi bara konstantera att OpenAI API är något man verkligen ska lära sig om man vill hänga med AI trenden och spara tid. Det går att göra mycket mer med API än med det vanliga chattbaserade boten.
+# pip install -r requirements.txt
+ 
+setx OPENAI_API_KEY "DIN_API_NYCKEL_HÄR"
 
-ChatGPT kan även vara en stor vilseledare om man inte känner till lite grund programmering. Vi är övertygade om att AI är ny tidens Industrialisering och för dem som gillar teknik är detta en dröm som man än inte fattat har blivit verklighet och för dem som är oroliga att AI ska ta deras jobb vill vi avsluta med en citat som ej vem 
+Starta om cmd och gå in till din projet så är du klar att köra.
 
-> "AI May Not Take Your Job, But Someone Using AI Likely Will"  
-> — Richard Baldwin, an economist and professor
+För att starta Flask-servern, skriv:
+
+   # python app.py
+
+Öppna en webbläsare och gå till: http://127.0.0.1:5000
+
+------------------------------------------------------------------------------------------
+
+## Automatisk installation med skript i powershell
+
+( Av säkerhets skäl har vi valt att endast köra installationen i virtuell miljö med skript. 
+vill ni köra utanför i vanligt miljö får ni köra manuell installation eller ändra i skriptfilen)
+
+Tryck på Win+x och välj att öppna PowerShell som administratör.
+
+Gå till projektets mapp.
+Kör skriptet:
+   # .\setup.ps1
+
+Skriptet kommer nu att göra allt jobb åt dig och köra programmet i slutet om allt gick bra!
+(OBS . API delen är inte inlagt i skriptet , men det kan du själv lägga in när du har en nyckel)
+
+Om du får ett fel om exekveringspolicyer, kan du behöva ändra körpolicyerna.
+Skriv följande kommando och välj YES (Y) och försök sedan att köra skriptet igen:
+
+#    Set-ExecutionPolicy RemoteSigned
+
+Efter att du har kört skriptet kan du återställa körpolicyn genom ange:
+
+    # Set-ExecutionPolicy Restricted
