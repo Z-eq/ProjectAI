@@ -17,11 +17,11 @@ Denna databas hanterar indexeringen av filer. Databasen har en tabell som heter 
 
 ### Exempel på SQL-schema:
 
-``sql
+`sql
 CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
     content TEXT
-);
+);`
 
  
  ### Funktioner relaterade till file_index.db: `
