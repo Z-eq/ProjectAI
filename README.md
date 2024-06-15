@@ -3,7 +3,7 @@ Introduktion
 Detta projekt är till att utveckla en applikation som använder OpenAI API för att generera websidor uppdatera websidor och analysera filer på egen dator. Projektet är delvis byggt med hjälp av ChatGPT, Vi har använt kod av redan skapade projekt och sedan gjort om till vår önskemål.
 Långt ifrån klar projekt och myckt finns att göra men såjhär lånmgt får man se inblick av OpenAI API.
 ## Innehållsförteckning -
- [Översikt av filer](#översikt-av-filer) - [Databasfunktioner](#databasfunktioner) - [Databasstruktur och relationer](#databasstruktur-och-relationer) - [Rollback-funktion](#rollback-funktion) - [API-dokumentation](#api-dokumentation) - [Installationsinstruktioner](RAPPORT.md)
+ [Översikt av filer](#översikt-av-filer) - [Databasfunktioner](#databasfunktioner) - [Databasstruktur och relationer](#databasstruktur-och-relationer) - [Rollback-funktion](#rollback-funktion) - [API-dokumentation](#api-dokumentation) - [Installationsinstruktioner](RAPPORT.md) - [Flow Chart](FlowChart-ProjectAI.pdf)
 
 ## Översikt av filer
 
