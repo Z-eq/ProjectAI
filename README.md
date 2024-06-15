@@ -105,7 +105,7 @@ def initialize_versions_db():
     conn.commit()
     conn.close()` 
 ```
-## Rollback-funktion )
+## Rollback-funktion 
 
 Rollback-funktionen används för att återställa en webbsida till en tidigare version för att säkerställa att man alltid har en backup om man gjort fel eller ångrar sig. 
 Här är en förklaring av hur den fungerar:
