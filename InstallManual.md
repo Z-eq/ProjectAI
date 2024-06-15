@@ -34,9 +34,9 @@ Skriv följande kommandon:
 
 Spara filen som .env i root av din projekt detta krävs för att köra vrituell miljö.
 
-När du är klar kör programmet!
+När du är klar kör programmet i cmd!
 
- #  python app.py
+ ####  python app.py
 
 ---------------------- UTAN VENV ---------------------------------------------------
 Altenativ 2 utan vitruell envoriemnt. 
