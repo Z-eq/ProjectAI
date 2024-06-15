@@ -20,11 +20,11 @@ Skriv följande kommandon:
     
     # python -m venv venv
 
-    # .\venv\Scripts\Activate
+   ##### .\venv\Scripts\Activate
 	
 	När du är i (venv) miljö anger du kommandot: 
 	
-	# pip install -r requirements.txt
+   #### pip install -r requirements.txt
 
 3. Du måste se till att API nyklen finns tillgänglig  i .env filen 
 
