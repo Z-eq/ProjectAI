@@ -74,7 +74,7 @@ Skriptet kommer nu att göra allt jobb åt dig och köra programmet i slutet om 
 Om du får ett fel om exekveringspolicyer, kan du behöva ändra körpolicyerna.
 Skriv följande kommando och välj YES (Y) och försök sedan att köra skriptet igen:
 
-#    Set-ExecutionPolicy RemoteSigned
+    # Set-ExecutionPolicy RemoteSigned
 
 Efter att du har kört skriptet kan du återställa körpolicyn genom ange:
 
