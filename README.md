@@ -423,24 +423,3 @@ def update_html():
 ````
 
 
-## Observationer
-
--   Implementeringen av filhantering var lite enklare men än mycket att lära sig, svårare var web generering var utmanande att göra rätt från början, alla detaljer måste vara uträknade och planerade och man bör kunna html eller noga inspektera genererade koden för att få rätt uppdatering då man måste unna benämningar. 
-    
--   Filförfrågning kan bli fel ibland beroende på vad man frågar i början. Finns mycket kvar att kalibrera.
-    
--   Att även använda sklearn modulen hade varit ett bra sätt att göra skriptet självlärande
-    
--   Använda GPT-4-Turbo kan bidra till mer avancerad och nograre apimen dyrare!
-    
--   Måste vara väldigt noga med koden så att man inte slösar token om man råkar ha en loop där stora filer finns.
-    
-
-## Slutsats
-
-Tanken var endast vi skulle bygga en web generator men när vi insåg att man även skulle ha fil funktion för att man ska kunna spara/uppdatera websidor tyckte vi det var intressant att ha en fil assistent. Efter att ha testat vår egna fil assistent och webgenerator kan vi bara konstantera att OpenAI API är något man verkligen ska lära sig om man vill hänga med AI trenden och spara tid. Det går att göra mycket mer med API än med det vanliga chattbaserade boten.
-
-ChatGPT kan även vara en stor vilseledare om man inte känner till lite grund programmering. Vi är övertygade om att AI är ny tidens Industrialisering och för dem som gillar teknik är detta en dröm som man än inte fattat har blivit verklighet och för dem som är oroliga att AI ska ta deras jobb vill vi avsluta med en citat!
-
-> "AI May Not Take Your Job, But Someone Using AI Likely Will"  
-> — Richard Baldwin, an economist and professor
