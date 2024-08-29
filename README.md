@@ -155,17 +155,17 @@ def rollback():
         return render_template('web_generator.html', rollback_response="Rollback failed. Version not found.", versions=get_versions())
  ``` 
 
-## API-dokumentation
+## API-documentation
 
-### OpenAI Query Funktion
+### OpenAI Query Function
 
-*  Funktion för att skicka förfrågningar till OpenAI och få ett svar
-* ( finns i utils.py )
+*  Function to send queries to OpenAI and receive a response
+* ( located in utils.py )
 
 ```python
 def query_openai_gpt(prompt):
     try:
-        # Skickar en fråga till OpenAI API
+        # Send a query to OpenAI API
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -173,11 +173,11 @@ def query_openai_gpt(prompt):
                 {"role": "user", "content": prompt}
             ]
         )
-        # Extraherar svaret från OpenAI
+        # Extract the response from OpenAI
         content = response.choices[0].message['content'].strip()
         logging.info(f"Received response: {content}")
         
-        # Extraherar endast HTML-innehåll om det är inneslutet i en kodblock
+        # Extract only HTML content if it is enclosed in a code block
         if "```html" in content and "```" in content:
             start = content.find("```html") + len("```html")
             end = content.find("```", start)
@@ -189,11 +189,11 @@ def query_openai_gpt(prompt):
         return "There was an error processing your request. Please try again later."
 ````
 
-#### *  ( API Exempel nedaför som ej finns med i koden men som kan implementeras,  här visar  vi endast i lärosyfte! )
+#### *  ( (API Examples below that are not included in the code but can be implemented, shown here for educational purposes!)
 
-I exemplet nedan ser vi  Systemts roll och Användarens roll. Man kan lägga till flera användarroller eller ändra Systemts roll, se fler exempel. 
+In the example below, we see the System's role and User's role. Additional user roles or changes to the System's role can be added, see more examples.
 
-* Här har vi förberett systemet att bli en kundservice representant och låtit användaren fritt fråga frnom att inte definera : promt till något specifikt. 
+* Here we have prepared the system to be a customer service representative and allowed the user to ask freely without defining the prompt to something specific.. 
 ```py
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
@@ -204,7 +204,7 @@ response = openai.ChatCompletion.create(
 )
 ````
 
-- Här nedan kan vi använda flerstegsfrågor för att specifiera mer. I detta exempel har vi delat frågan i flera steg för att få mer struktuerat svar.
+- Below, we can use multi-step queries to specify more. In this example, we split the question into several steps to get a more structured answer.
 ```py
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
@@ -218,7 +218,8 @@ response = openai.ChatCompletion.create(
     ]
 )
 ```
-Här blir systemet en json expert och svarar i json format. Vi kan lätt formatera en text fil till json fomrat. 
+Here, the system becomes a JSON expert and responds in JSON format. We can easily format a text file into JSON format.
+
 ```py
 response = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
