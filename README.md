@@ -1,52 +1,48 @@
-# Project AI Beskrivning
-Introduktion
-Detta projekt är till att utveckla en applikation som använder OpenAI API för att generera websidor uppdatera websidor och analysera filer på egen dator. Projektet är delvis byggt med hjälp av ChatGPT, Vi har använt kod av redan skapade projekt och sedan gjort om till vår önskemål.
-Långt ifrån klar projekt och myckt finns att göra men såjhär lånmgt får man se inblick av OpenAI API.
-## Innehållsförteckning -
-[Installations instruktioner](InstallManual.md) - [Översikt av filer](#översikt-av-filer) - [Databasfunktioner](#databasfunktioner) - [Databasstruktur och relationer](#databasstruktur-och-relationer) -  [Rollback-funktion](#rollback-funktion) - [API-dokumentation](#api-dokumentation) -  [Flow Chart](FlowChart-ProjectAI.pdf)
+# Project AI Description
+Introduction
+This project is aimed at developing an application that uses the OpenAI API to generate web pages, update web pages, and analyze files on your computer. The project is partially built with the help of ChatGPT. We have used code from already created projects and then modified it according to our needs. The project is far from complete and there is much to be done, but this is an overview of OpenAI API so far.
 
+## Table of Contents
+[Installation Instructions](InstallManual.md) - [File Overview](#file-overview) - [Database Functions](#database-functions) - [Database Structure and Relationships](#database-structure-and-relationships) - [Rollback Function](#rollback-function) - [API Documentation](#api-documentation) - [Flow Chart](FlowChart-ProjectAI.pdf)
 
-## Översikt av filer
+## File Overview
 
 ### `app.py`
-- Huvudfilen för att starta Flask-server appen att rendera html sidor
-- Registrerar blueprint för olika delar av applikationen.
-- Säkerställer att nödvändiga mappar och databaser finns.
--   Startar serven på host `0.0.0.0` och port `5000`. eller frivilligt port   som är ledig
+- Main file for starting the Flask server application to render HTML pages.
+- Registers blueprints for different parts of the application.
+- Ensures necessary folders and databases exist.
+- Starts the server on host `0.0.0.0` and port `5000`, or optionally any available port.
 
 ### `file_query/routes.py`
-- Hanterar frågor om filer.
-- Kan lista, räkna och läsa filer beroende på användarens fråga.
-- Använder OpenAI för att tolka frågor och ge svar.
+- Handles file queries.
+- Can list, count, and read files depending on the user's query.
+- Uses OpenAI to interpret questions and provide answers.
 
 ### `web_generator/web_routes.py`
-- Hanterar generering, uppdatering och rollback av webbsidor.
-- Använder OpenAI för att skapa och uppdatera webbsidor baserat på användarens beskrivningar eller valda mallar i .json format.
+- Handles generation, updating, and rollback of web pages.
+- Uses OpenAI to create and update web pages based on user descriptions or selected templates in JSON format.
 
 ### `utils.py`
-- Innehåller funktioner för att initialisera databaser.
-- Funktioner för att spara och hämta versioner av webbsidor.
-- Funktion för att kommunicera med OpenAI API.
+- Contains functions to initialize databases.
+- Functions to save and retrieve versions of web pages.
+- Function to communicate with OpenAI API.
 
 ### `file_indexer.py`
-- Innehåller funktioner för att extrahera text från olika filtyper.
-- Funktioner för att indexera filer och spara deras innehåll i databasen.
-- Funktioner för att hämta innehållet i specifika filer.
+- Contains functions to extract text from various file types.
+- Functions to index files and save their contents in the database.
+- Functions to retrieve the content of specific files.
 
+## Database Functions
 
-## Databasfunktioner
+### Database Structure and Relationships
 
-### Databasstruktur och relationer
+The project uses SQLite, a simple database to store information about files and versions of web pages. There are two databases: one for file queries and one for web generation.
 
-Projektet använder SQLite, en enkel databas för att lagra information om filer och versioner av webbsidor.
- Det finns två databaser en för Fil förfrågningar och en för webgenerator.
-
-### `file_index.db` ( filförfrågningar )
-- Hanterar information om indexerade filer för file_query
-- Tabell: `files`
-  - **file_path**: TEXT (Primärnyckel) - Filens sökväg.
-  - **content**: TEXT - Filens innehåll.
-
+### `file_index.db` (file queries)
+- Manages information about indexed files for file_query.
+- Table: `files`
+  - **file_path**: TEXT (Primary Key) - File path.
+  - **content**: TEXT - File content.
 ```sql
 CREATE TABLE IF NOT EXISTS files (
     file_path TEXT PRIMARY KEY,
@@ -54,7 +50,8 @@ CREATE TABLE IF NOT EXISTS files (
 );
 
 ```
-#### Funktioner relaterade till `file_index.db`:
+#### Functions related to ´file_index.db´:
+
 
 ```py
 def initialize_file_index_db():
@@ -75,11 +72,11 @@ def initialize_file_index_db():
 -   Hantera versioner av genererade webbsidor genom att lägga in dem i tabell och undercolumner som nedan. Dessa finns i utils.py  
 
 -   Tabell: `web_generator_versions`
-    -   **id**: INTEGER (Primärnyckel, autoincrement) - Versions-ID.
-    -   **page_name**: TEXT - Namnet på webbsidan man anger när man skapar det & uppdaterar.
-    -   **version_id**: TEXT - Unikt ID för varje version.
-    -   **timestamp**: TEXT - Tidpunkten då versionen skapades.
-    -   **content**: TEXT - Innehållet i webbsidan.
+    -   **id**: INTEGER (Primary Key, autoincrement) - Version ID.
+    -   **page_name**: TEXT - The name of the web page as specified during creation and updates.
+    -   **version_id**: TEXT - Unique ID for each version.
+    -   **timestamp**: TEXT - TEXT - Timestamp when the version was created.
+    -   **content**: TEXT - Content of the web page.
 
 ```sql
 CREATE TABLE IF NOT EXISTS web_generator_versions (
@@ -91,7 +88,7 @@ CREATE TABLE IF NOT EXISTS web_generator_versions (
 );
 ```
 
-#### Funktioner relaterade till `versions.db`:
+#### Functions related to `versions.db`:
 
 ```sql
 def initialize_versions_db():
@@ -109,23 +106,23 @@ def initialize_versions_db():
     conn.commit()
     conn.close()` 
 ```
-## Rollback-funktion 
+## Rollback-function 
 
-Rollback-funktionen används för att återställa en webbsida till en tidigare version för att säkerställa att man alltid har en backup om man gjort fel eller ångrar sig. 
-Här är en förklaring av hur den fungerar:
+The rollback function is used to restore a web page to a previous version to ensure that you always have a backup if you make a mistake or change your mind. Here is an explanation of how it works:
 
-1.  Användaren väljer en tidigare version av en webbsida.
-2.  Systemet hämtar innehållet för den versionen från databasen.
-3.  Innehållet skrivs tillbaka till den aktuella filen, vilket återställer sidan till den tidigare versionen.
+1. The user selects a previous version of a web page.
+2. The system retrieves the content for that version from the database.
+3. The content is written back to the current file, restoring the page to the previous version.
 
-### Kodexempel för rollback:
+### Code Example for rollback:
 
 #### POST /web_generator/rollback
 
 
--   **Beskrivning**: Återställer en webbsida till en tidigare version.
--   **Parametrar**:
-    -   `page_id`: ID för sidan som ska återställas.
+-   **Description**: Restores a web page to a previous version.
+.
+-   **Parameters**:
+    -   `page_id`: ID of the page to be restored.
     -   `version_id`: ID för versionen som ska återställas.
 
 
