@@ -313,107 +313,79 @@ def extract_file_name(query):
 ```
 
 ### GET /web_generator
-
--   **Beskrivning**: Hämtar webgenerator sidan web_generator.html.
+-   **Description**: Retrieves the web_generator.html page.
 
 ### POST /web_generator
 
--   **Beskrivning**: Hanterar förfrågningar om att generera webbsidor.
--   **Parametrar**:
-    -   `description`: Beskrivning för hur websidan ska vara, måste vara väldigt specifikt och detaljerat så möjlig.
-    -   `template`: Mall som ska användas för webbsidan, innehåller redan för definerade promtar i .json format kan läggas till flera ( måste lägga till deras namn i html templates isåfall samt definera om web_routes.json till att använda andra format samt göra det anrop av filtyp.
-
-#### Kodexempel för /web_generator:
+-   **Description**:  Description of how the web page should be. Must be very specific and detailed.
+-   **Parameters**:
+    -   `description`:  Description of how the web page should be. Must be very specific and detailed.
+    -   
+    -   `template`: Template to be used for the web page, in JSON format. Multiple templates can be added.
+    -   
+#### Kodexampel for /web_generator:
 
 ```py
 @web_generator_bp.route('/web_generator', methods=['GET', 'POST'])
 def generate_page():
-    if request.method == 'POST':  # Kolla att förfrågan är en POST
-        page_name = request.form['page_name']  # Hämta sidnamnet från namn formen
-        page_description = request.form['page_description']  # Hämta sidbeskrivningen från description formuläret
-        template_choice = request.form.get('template_choice')  # Hämta vald mall från formuläret
+    if request.method == 'POST':  # Check if the request is a POST
+        page_name = request.form['page_name']  # Get the page name from the form
+        page_description = request.form['page_description']  # Get the page description from the form
+        template_choice = request.form.get('template_choice')  # Get the chosen template from the form
 
         logging.debug(f"Received page_name: {page_name}, page_description: {page_description}, template_choice: {template_choice}")
 
-        if not page_name:  # Om sidnamnet saknas, visa ett felmeddelande
+        if not page_name:  # If the page name is missing, display an error message
             flash('Page Name is required.', 'danger')
             return redirect(url_for('web_generator.generate_page'))
 
-        page_folder_path = os.path.join(OUTPUT_FOLDER_PATH, page_name)  # Skapa en mapp för sidan
-        os.makedirs(page_folder_path, exist_ok=True)  # Skapa mappen om den inte finns
+        page_folder_path = os.path.join(OUTPUT_FOLDER_PATH, page_name)  # Create a folder for the page
+        os.makedirs(page_folder_path, exist_ok=True)  # Create the folder if it does not exist
 
-        if page_description:  # Om sidbeskrivning finns, använd den för att skapa prompten
+        if page_description:  # If a page description is provided, use it to create the prompt
             openai_prompt = page_description
-            html_content = query_openai_gpt(openai_prompt)  # Fråga OpenAI med beskrivningen
-        elif template_choice in TEMPLATE_PROMPTS:  # Om en mall är vald, använd den
+            html_content = query_openai_gpt(openai_prompt)  # Query OpenAI with the description
+        elif template_choice in TEMPLATE_PROMPTS:  # If a template is chosen, use it
             html_content = query_openai_gpt(TEMPLATE_PROMPTS[template_choice])
-        else:  # Annars, använd en standardmall
+        else:  # Otherwise, use a default template
             with open('default_template.json', 'r') as file:
                 default_prompt = json.load(file)['prompt']
             html_content = query_openai_gpt(default_prompt)
 
-        # Skapar HTML-mallen för sidan
+        # Create the HTML template for the page
         html_template = f"""
         ........
         try:
-            # Spara HTML-filen i skrivläge
+            # Save the HTML file
             with open(os.path.join(page_folder_path, f"{page_name}.html"), 'w', encoding='utf-8') as file:
                 file.write(html_template)
-            # Spara CSS-filen i skrivläge 
+            # Save the CSS file 
             with open(os.path.join(page_folder_path, f"{page_name}.css"), 'w', encoding='utf-8') as file:
                 file.write(css_content)
-            # Spara JS-filen i skrivläge
+            # Save the JS file
             with open(os.path.join(page_folder_path, f"{page_name}.js"), 'w', encoding='utf-8') as file:
                 file.write(js_content)
 
-            # Spara en version av sidan
+            # Save a version of the page
             save_version(page_name, html_template)
             page_url = url_for('static', filename=f'output/{page_name}/{page_name}.html')
             return render_template('web_generator.html', generate_response=f'Webpage generated and saved to <a href="{page_url}" target="_blank">{page_name}.html</a>', versions=get_versions())
-        except Exception as e:  # Hantera eventuella fel
+        except Exception as e:  # Handle any errors
             logging.error(f"Error saving files: {e}")
             return render_template('web_generator.html', generate_response="There was an error saving the generated files.", versions=get_versions())
     return render_template('web_generator.html', versions=get_versions())
+
 ````
 
 ### POST /web_generator/update
 
--   **Beskrivning**: Uppdaterar en befintlig webbsida.
--   **Parametrar**:
-    -   `page_id`: ID för sidan som ska uppdateras.
-    -   `content`: Nytt innehåll för sidan.
--   **Svar**: Bekräftelse på uppdateringen.
-- Man måste vara noga med vad man ber om att uppdatera och känna till html kod och benämningar föra att bli bra.. Finns mycket kvar att förbättra och effektisera!
+-   **Beskrivning**: Updates an existing web page. Parameters:
 
-#### Kodexempel för /web_generator/update:
-```py
-@web_generator_bp.route('/update_html', methods=['POST'])
-def update_html():
-    page_name = request.form['page_name']
-    update_description = request.form['update_description']
+-  page_id: ID of the page to be updated.
+-  content: New content for the page.
 
-    file_path = os.path.join(OUTPUT_FOLDER_PATH, page_name, f"{page_name}.html")
-
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            existing_content = file.read()
-    except Exception as e:
-        logging.error(f"Error reading HTML file: {e}")
-        return render_template('web_generator.html', update_response="There was an error reading the HTML file.", versions=get_versions())
-
-    openai_prompt = f"Here is the current HTML content:\n\n{existing_content}\n\nUpdate it based on the following description:\n\n{update_description}\n\nMake sure to only change the relevant sections and keep the rest of the content intact."
-    updated_content = query_openai_gpt(openai_prompt)
-
-    try:
-        with open(file_path, 'w', encoding='utf-8') as file:
-            file.write(updated_content)
-
-        save_version(page_name, updated_content)
-        page_url = url_for('static', filename=f'output/{page_name}/{page_name}.html')
-        return render_template('web_generator.html', update_response=f'HTML file updated successfully. <a href="{page_url}" target="_blank">View updated page</a>', versions=get_versions())
-    except Exception as e:
-        logging.error(f"Error updating HTML file: {e}")
-        return render_template('web_generator.html', update_response="There was an error updating the HTML file.", versions=get_versions())
-````
+-  **Response:** Confirmation of the update.
+- It is essential to be precise about what you request to update and to understand HTML code and naming conventions to ensure accuracy. There is still much room for improvement and optimization.
 
 
+If u have questions feel free to conact me pm or mail zeq.alidemaj @ gmail.com
