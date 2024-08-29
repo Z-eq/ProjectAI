@@ -67,9 +67,9 @@ def initialize_file_index_db():
     conn.close()` 
 
 ```
-### `versions.db`( för web_generator )
+### `versions.db`( for web_generator )
 
--   Hantera versioner av genererade webbsidor genom att lägga in dem i tabell och undercolumner som nedan. Dessa finns i utils.py  
+-   Manages versions of generated web pages by inserting them into a table and subcolumns as described below. These are present in ´utils.py´.  
 
 -   Tabell: `web_generator_versions`
     -   **id**: INTEGER (Primary Key, autoincrement) - Version ID.
@@ -123,35 +123,35 @@ The rollback function is used to restore a web page to a previous version to ens
 .
 -   **Parameters**:
     -   `page_id`: ID of the page to be restored.
-    -   `version_id`: ID för versionen som ska återställas.
+    -   `version_id`: ID of the version to be restored.
 
 
-
-* ##### Funktionerna finns i /web_generator/web_routes.py 
+* ##### Functions are located in /web_generator/web_routes.py
+ 
 
 ```py
 @web_generator_bp.route('/rollback', methods=['POST'])
 def rollback():
-    version_id = request.form['version_id']  # Hämta versions-ID från formuläret
-    page_name = request.form['page_name']  # Hämta sidnamnet från formuläret
+    version_id = request.form['version_id']  # Get version ID from form
+    page_name = request.form['page_name']  # Get page name from form
     
     logging.debug(f"Rollback requested for version_id: {version_id}, page_name: {page_name}")
     
-    version_response = get_version_by_id(version_id)  # Hämta innehållet för den specifika versionen
+    version_response = get_version_by_id(version_id)  # Get content for the specific version
     if version_response:
         try:
-            file_path = os.path.join(OUTPUT_FOLDER_PATH, page_name, f"{page_name}.html")  # Hämta filvägen
+            file_path = os.path.join(OUTPUT_FOLDER_PATH, page_name, f"{page_name}.html")  # Get file path
             with open(file_path, 'w', encoding='utf-8') as file:
-                file.write(version_response)  # Skriv versionens innehåll till filen
+                file.write(version_response)  # Write version content to file
             
-            flash('Rollback successful.', 'success')  # Visa ett meddelande om att återställningen lyckades
+            flash('Rollback successful.', 'success')  # Display message that rollback was successful
             page_url = url_for('static', filename=f'output/{page_name}/{page_name}.html')
             return render_template('web_generator.html', rollback_response=f'Rollback successful. <a href="{page_url}" target="_blank">View rolled back page</a>', versions=get_versions())
         except Exception as e:
             logging.error(f"Error during rollback: {e}")
             return render_template('web_generator.html', rollback_response="There was an error during rollback.", versions=get_versions())
     else:
-        flash('Rollback failed. Version not found.', 'danger')  # Visa ett felmeddelande om versionen inte hittades
+        flash('Rollback failed. Version not found.', 'danger')  # Display error message if version not found
         return render_template('web_generator.html', rollback_response="Rollback failed. Version not found.", versions=get_versions())
  ``` 
 
