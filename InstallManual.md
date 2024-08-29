@@ -1,81 +1,127 @@
-# Manuell & Automatisk installation med skript för powershell
+# Installation Guide
 
-**** Manuell installation ***
+This guide provides instructions for both manual and automatic installation using PowerShell scripts.
 
-Innan du börjar, se till att du har följande programvara installerad:
+## **Manual Installation**
 
--  Python3 
+Before you begin, ensure you have the following software installed:
 
-1. Extrahera projektet till den plats där du vill ha det.
+- **Python 3**
 
-2. Ställ in en virtuell miljö
+### Step 1: Extract the Project
 
-Att ställa in en virtuell miljö är frillivilligt man kan hoppa över detta om man vill men är rekommenderat
-för att inte påverka andra program eller paket och för statbilitet, läs mera om "virtual environment in python").
+Extract the project to the desired location on your system.
 
-Öppna kommandotolken (cmd) och gå till projektets mapp .
+### Step 2: Set Up a Virtual Environment (Optional)
 
+Setting up a virtual environment is optional but recommended to avoid impacting other programs or packages and to maintain stability. You can read more about [Python Virtual Environments](https://docs.python.org/3/tutorial/venv.html).
 
-Skriv följande kommandon:
+1. Open Command Prompt (cmd) and navigate to the project folder.
+2. Run the following commands:
+
+    ```bash
+    # Create a virtual environment
+    python -m venv venv
     
-    # python -m venv venv
+    # Activate the virtual environment
+    .\venv\Scripts\Activate
+    ```
 
-   ##### .\venv\Scripts\Activate
-	
-	När du är i (venv) miljö anger du kommandot: 
-	
-   #### pip install -r requirements.txt
+3. With the virtual environment activated, install the necessary dependencies:
 
-3. Du måste se till att API nyklen finns tillgänglig  i .env filen 
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-  1. Du behöver skapa en fil som heter .env i projektmappen :
-  
-  OPENAI_API_KEY= din_openai_api_nyckel
+### Step 3: Configure the API Key
 
-Spara filen som .env i root av din projekt detta krävs för att köra vrituell miljö.
+Ensure that the API key is available in the `.env` file:
 
-När du är klar kör programmet i cmd!
+1. Create a file named `.env` in the project folder.
+2. Add your OpenAI API key as follows:
 
- ####  python app.py
+    ```bash
+    OPENAI_API_KEY=your_openai_api_key
+    ```
 
----------------------- UTAN VENV ---------------------------------------------------
-Altenativ 2 utan vitruell envoriemnt. 
- 
-Öppna cmd och kör kommandot nedan:
+3. Save the `.env` file in the root of your project. This step is required to run the application in the virtual environment.
 
-#### pip install -r requirements.txt
- 
-setx OPENAI_API_KEY "DIN_API_NYCKEL_HÄR"
+### Step 4: Run the Application
 
-Starta om cmd och gå in till din projet så är du klar att köra.
+After completing the above steps, you can run the program:
 
-För att starta Flask-servern, skriv:
 
-#### python app.py
+python app.py
 
-Öppna en webbläsare och gå till: http://127.0.0.1:5000
+### **Without Virtual Environment**
 
-------------------------------------------------------------------------------------------
+As an alternative, you can install the dependencies without setting up a virtual environment:
 
-## Automatisk installation med skript i powershell
+1. Open Command Prompt (cmd) and run:
 
-( Av säkerhets skäl har vi valt att endast köra installationen i virtuell miljö med skript. 
-vill ni köra utanför i vanligt miljö får ni köra manuell installation eller ändra i skriptfilen så det inte går in virtuel miljö i början)
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-Tryck på Win+x och välj att öppna PowerShell som administratör.
+2. Set the API key in the system environment variables:
 
-Gå till projektets mapp.
-Kör skriptet:
-   # .\setup.ps1
+    ```bash
+    setx OPENAI_API_KEY "YOUR_API_KEY_HERE"
+    ```
 
-Skriptet kommer nu att göra allt jobb åt dig och köra programmet i slutet om allt gick bra!
-(OBS . API delen är inte inlagt i skriptet , men det kan du själv lägga in när du har en nyckel)
+3. Restart Command Prompt and navigate to your project directory.
 
-Om du får ett fel om exekveringspolicyer, kan du behöva ändra körpolicyerna.
-Skriv följande kommando och välj YES (Y) och försök sedan att köra skriptet igen:
+4. Run the Flask server:
 
-    # Set-ExecutionPolicy RemoteSigned
+    ```bash
+    python app.py
+    ```
 
-Efter att du har kört skriptet kan du återställa körpolicyn genom ange:
+5. Open a browser and go to [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-    # Set-ExecutionPolicy Restricted
+---
+
+## **Automatic Installation with PowerShell Script**
+
+> **Note:** For security reasons, the script only installs the application in a virtual environment. If you wish to install it outside of a virtual environment, either follow the manual installation steps or modify the script to avoid entering the virtual environment at the beginning.
+
+### Step 1: Run PowerShell as Administrator
+
+Press `Win + X` and select **PowerShell (Admin)**.
+
+### Step 2: Navigate to the Project Directory
+
+Use the `cd` command to navigate to the project folder.
+
+### Step 3: Execute the Script
+
+Run the setup script:
+
+```bash
+.\setup.ps1
+```
+
+
+The script will handle the installation and will attempt to run the program if everything goes smoothly.
+
+Step 4: API Key Configuration
+The API key is not included in the script. After running the script, add your API key to the .env file as described in the manual installation steps.
+
+Step 5: Handling Execution Policies
+If you encounter errors related to execution policies, you may need to adjust them temporarily:
+
+Change the execution policy:
+
+```bash
+Set-ExecutionPolicy RemoteSigned
+```
+After running the script, you can restore the original execution policy:
+
+```bash
+Set-ExecutionPolicy Restricted
+```
+### Key Points:
+
+1. **Indentation:** Ensure that any sub-items or code blocks are indented correctly under their respective list items or headings.
+2. **Code Blocks:** Use triple backticks (\`\`\`) to denote code blocks, followed by the language identifier (e.g., `bash`).
+3. **Links:** Ensure that URLs are enclosed in square brackets with a descriptive text, followed by the actual URL in parentheses.
