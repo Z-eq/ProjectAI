@@ -247,7 +247,7 @@ These examples demonstrate how to customize the use of the OpenAI API for variou
 - **Count files:** Returns the number of files.
 - **Read file contents:** Returns the contents of the specified file.
 
-#### Kodexempel för /file_query:
+#### Codexampple for /file_query:
 
 ```py
 @file_query_bp.route('/file_query', methods=['GET', 'POST'])
@@ -323,7 +323,7 @@ def extract_file_name(query):
     -   
     -   `template`: Template to be used for the web page, in JSON format. Multiple templates can be added.
     -   
-#### Kodexampel for /web_generator:
+#### Codexample for /web_generator:
 
 ```py
 @web_generator_bp.route('/web_generator', methods=['GET', 'POST'])
@@ -379,7 +379,7 @@ def generate_page():
 
 ### POST /web_generator/update
 
--   **Beskrivning**: Updates an existing web page. Parameters:
+-   **Description**: Updates an existing web page. Parameters:
 
 -  page_id: ID of the page to be updated.
 -  content: New content for the page.
