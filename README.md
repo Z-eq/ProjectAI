@@ -319,8 +319,7 @@ def extract_file_name(query):
 
 -   **Description**:  Description of how the web page should be. Must be very specific and detailed.
 -   **Parameters**:
-    -   `description`:  Description of how the web page should be. Must be very specific and detailed.
-    -   
+  
     -   `template`: Template to be used for the web page, in JSON format. Multiple templates can be added.
     -   
 #### Codexample for /web_generator:
